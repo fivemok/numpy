@@ -3759,6 +3759,7 @@ recursive_find_object_timedelta64_type(PyObject *obj,
     if (PyArray_Check(obj)) {
         PyArrayObject *arr = (PyArrayObject *)obj;
         PyArray_Descr *arr_dtype = PyArray_DESCR(arr);
+        Py_ssize_t arr_ndim = PyArray_NDIM(arr);
 
         /* If the array has metadata, use it */
         if (arr_dtype->type_num == NPY_DATETIME ||
@@ -3780,7 +3781,7 @@ recursive_find_object_timedelta64_type(PyObject *obj,
             return 0;
         }
         /* If it's not an object array, stop looking */
-        else if (arr_dtype->type_num != NPY_OBJECT) {
+        else if (arr_dtype->type_num != NPY_OBJECT || arr_ndim == 0) {
             return 0;
         }
     }
